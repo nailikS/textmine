@@ -3,6 +3,7 @@ import os
 import re
 import string
 import csv
+from typing import Text
 import spacy
 from nltk.stem import PorterStemmer
 
@@ -51,4 +52,33 @@ else:
     #array of lectures
     dataset = readLectures(input)
     input.close
-    print(len(dataset))
+    #print(len(dataset))
+    #preprocess descriptions
+    nlp = spacy.load('en_core_web_sm')
+    ps = PorterStemmer()
+    vocabulary = set()
+    for lct in dataset:
+        words = nlp(lct.description)
+        #remove stopwords
+        for w in words:
+            if not w.is_stop and w.is_alpha:
+                #check if only text
+                stemmedWord = ps.stem(w.text)
+                vocabulary.add(stemmedWord)
+                lct.processedDesc.append(stemmedWord)
+    output = open('ttd.csv', 'w')
+    titles = open('titles.txt', 'w')
+    for lct in dataset:
+        titles.writelines(lct.title + "\n")
+        line = ''
+        for word in vocabulary:
+            if len(line) > 0:
+                line += '\t'
+            if word in lct.processedDesc:
+                line += '1'
+            else:
+                line += '0'
+        output.writelines(line + '\n')
+    output.close()
+    titles.close()
+        
