@@ -6,7 +6,7 @@ from yellowbrick.cluster import SilhouetteVisualizer, silhouette
 from scipy.cluster.hierarchy import dendrogram, linkage
 from matplotlib import pyplot as plt
 import scipy.cluster.hierarchy as shc
-from nltk.cluster import KMeansClusterer, euclidean_distance, cosine_distance
+import nltk.cluster
 
 data = genfromtxt('ttd.csv', delimiter = '\t')
 clusterer = KMeansClusterer(4, euclidean_distance)
