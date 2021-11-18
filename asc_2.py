@@ -10,7 +10,7 @@ d = dict()
 
 for line in input:
     line = line.strip()
-    words = line.split(" ")
+    words = re.split('[.\s]', line)
 
     for word in words:
         # Check if the word is already in dictionary
